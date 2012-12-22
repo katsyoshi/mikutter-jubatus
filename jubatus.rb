@@ -15,16 +15,25 @@ Plugin.create(:jotei2) do
     end
   end
 
+  def delay_fav(message)
+    sec = rand(UserConfig[:fav_lazy].to_i)
+    return sec if message.from_me?
+    Reserver.new(sec.to_i) do
+      message.favorite(true) if !message.favorite? && !message[:retweet]
+    end
+    return sec
+  end
+
   def classify(msg)
     sgs = suggestion(@jubamikutter, msg.to_s)
     STDERR.puts sgs
     if sgs
-      msg.favorite(true)
       if UserConfig[:jubatus_train] == true
         data = {str_key: 'message', str_data: msg}
         datum = @jubamikutter.set_datum({str_key: 'message', str_data: msg})
         @jubamikutter.train(@jubamikutter.jubatus, [["favorite", datum]])
       end
+      delay_fav(msg)
     else
       if UserConfig[:jubatus_train] == true
         datum = @jubamikutter.set_datum({str_key: 'message', str_data: msg})
