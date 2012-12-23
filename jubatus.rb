@@ -4,15 +4,17 @@ require dirname + '/jubamikutter.rb'
 
 Plugin.create(:jubatus) do
   on_boot do
+    @msgq = []
     @jubamikutter = JubaMikutter.new(dirname+'/learn.conf')
   end
 
   on_update do |service, message|
     if !message.empty?
       message.map do |msg|
-        classify(msg)
+        classify msg
       end
     end
+
   end
 
   def classify(msg)
@@ -32,6 +34,8 @@ Plugin.create(:jubatus) do
         @jubamikutter.train(@jubamikutter.jubatus, [["tweet",datum]])
       end
     end
+  rescue => e
+    STDERR.puts e
   end
 
   def suggestion(jubatus, msg)
@@ -57,7 +61,15 @@ Plugin.create(:jubatus) do
   end
 
   on_favorite do |service, user, message|
-    STDERR.puts user
+    begin
+      if UserConfig[:jubatus_train] == true && message.idname != service.user
+        data = {str_key: 'message', str_data: message.to_s}
+        datum = @jubamikutter.set_datum(data)
+        @jubamikutter.train(@jubamikutter.jubatus, [["favorite", datum]])
+      end
+    rescue => e
+      STDERR.puts e
+    end
   end
 
   def delay_fav(message)
