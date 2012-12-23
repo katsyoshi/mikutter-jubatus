@@ -4,7 +4,7 @@ mikutterのプラグインです．以前つくったfav_bayes.rbのようなも
 
 どうつかうの？
 -------
-まず，[jubatus](http://jubat.us/)を準備します．インストールは簡単で，Ubuntu，Debian，CentOSなら[公式ページ](http://jubat.us/ja/quickstart.html)をよく読んでパッケージを落として各OSにあわせた方法でインストールできます．Macの場合は，jubatusのリポジトリからhomebrewのformulaをダウンロードしてインストールするのが楽だと思う．インストールが終わったら，jubaclassifierを起動しておいてください．準備がとりあえずこのリポジトリからおとしてmikutterのプラグインディレクトリへいれる．
+まず，[jubatus](http://jubat.us/) を準備します．インストールは簡単で，Ubuntu，Debian，CentOSなら[公式ページ](http://jubat.us/ja/quickstart.html) をよく読んでパッケージを落として各OSにあわせた方法でインストールできます．Macの場合は，jubatusのリポジトリからhomebrewのformulaをダウンロードしてインストールするのが楽だと思う．インストールが終わったら，jubaclassifierを起動しておいてください．準備がとりあえずこのリポジトリからおとしてmikutterのプラグインディレクトリへいれる．
 
     git clone git://github.com/katsyoshi/mikutter-jubatus.git ~/.mikutter/plugin/jubatus
     cd ~/.mikutter/plugin/jubatus
