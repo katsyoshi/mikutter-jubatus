@@ -6,7 +6,7 @@ string_types:
     mecab:
         method: dynamic
         function: create
-        path: /usr/local/Cellar/jubatus/0.3.3/lib/jubatus/plugin/libmecab_splitter.dylib
+        path: /path/to/jubatus/plugin/libmecab_splitter.so
         arg: ""
 string_rules:
     - key: "*"
