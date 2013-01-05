@@ -14,28 +14,26 @@ Plugin.create(:jubatus) do
         classify msg
       end
     end
-
   end
 
   def classify(msg)
     sgs = suggestion(@jubamikutter, msg.to_s)
-    STDERR.puts sgs
+    STDERR.print "classify:#{sgs.to_s}"
+    data = {str_key: 'message', str_data: msg.to_s}
+    datum = @jubamikutter.set_datum(data)
+
     if sgs
-      if UserConfig[:jubatus_train] == true
-        data = {str_key: 'message', str_data: msg.to_s}
-        datum = @jubamikutter.set_datum(data)
-        @jubamikutter.train(@jubamikutter.jubatus, [["favorite", datum]])
-      end
       delay_fav(msg)
     else
       if UserConfig[:jubatus_train] == true
-        data = {str_key: 'message', str_data: msg.to_s}
-        datum = @jubamikutter.set_datum(data)
-        @jubamikutter.train(@jubamikutter.jubatus, [["tweet",datum]])
+        train = @jubamikutter.train(@jubamikutter.jubatus, [["tweet",datum]])
+        STDERR.print "\ttrain:#{train.to_s}"
       end
     end
   rescue => e
-    STDERR.puts e
+    STDERR.print "\terror:#{e.to_s}"
+  ensure
+    STDERR.puts ''
   end
 
   def suggestion(jubatus, msg)
@@ -62,13 +60,14 @@ Plugin.create(:jubatus) do
 
   on_favorite do |service, user, message|
     begin
-      if UserConfig[:jubatus_train] == true && message.idname != service.user
+      if UserConfig[:jubatus_train] && user == service.user
         data = {str_key: 'message', str_data: message.to_s}
         datum = @jubamikutter.set_datum(data)
-        @jubamikutter.train(@jubamikutter.jubatus, [["favorite", datum]])
+        train = @jubamikutter.train(@jubamikutter.jubatus, [["favorite", datum]])
+        STDERR.print "user:#{user}\ttrain:#{train.to_s}\n"
       end
     rescue => e
-      STDERR.puts e
+      STDERR.puts "error:#{e.to_s}"
     end
   end
 

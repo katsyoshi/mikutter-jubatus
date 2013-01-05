@@ -7,6 +7,8 @@ require 'msgpack'
 
 class JubaMikutter
   attr_reader :jubatus
+  FAVORITE='favorite'
+  TWEET='tweet'
   def initialize(config)
     conf = read_config(config)
     dirname = File.dirname(File.expand_path(config))
@@ -45,5 +47,9 @@ class JubaMikutter
 
   def classify(jubatus,data, name='a')
     return jubatus.classify(name, data)
+  end
+
+  def save(jubatus, name='a')
+    return jubatus.save(name, '')
   end
 end
