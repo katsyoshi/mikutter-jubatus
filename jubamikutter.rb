@@ -14,9 +14,7 @@ class JubaMikutter
     dirname = File.dirname(File.expand_path(config))
     hoge = dirname+'/'+conf["jubatus"]
     learn = read_config(File.expand_path(hoge))
-    @jubatus = Jubatus::Client::Classifier.new(conf["host"],conf["port"].to_i)
-    settings = Jubatus::Config_data.new(conf["algo"], learn.to_json)
-    @jubatus.set_config(conf['name'], settings)
+    @jubatus = Jubatus::Classifier::Client::Classifier.new(conf["host"],conf["port"].to_i)
   end
 
   def get_most_likely(estimates)
@@ -37,7 +35,7 @@ class JubaMikutter
   end
 
   def set_datum(data={str_key: nil, str_data: nil, num_key: nil, num_data: nil})
-    datum = Jubatus::Datum.new([[data[:str_key], data[:str_data]]],[])
+    datum = Jubatus::Classifier::Datum.new([[data[:str_key], data[:str_data]]],[])
     return datum
   end
 
