@@ -23,7 +23,7 @@ Plugin.create(:jubatus) do
     datum = @jubamikutter.set_datum(data)
 
     if sgs
-      delay_fav(msg)
+      delay_fav(msg) if UserConfig[:jubatus_auto]
     else
       if UserConfig[:jubatus_train] == true
         train = @jubamikutter.train(@jubamikutter.jubatus, [["tweet",datum]])
@@ -72,10 +72,10 @@ Plugin.create(:jubatus) do
   end
 
   def delay_fav(message)
-    sec = rand(UserConfig[:fav_lazy].to_i)
+    sec = rand(UserConfig[:jubatus_delay].to_i)
     return sec if message.from_me?
     Reserver.new(sec.to_i) do
-      message.favorite(true) if !message.favorite? && !message[:retweet]
+      message.favorite(true) if !message.favorite?
     end
     return sec
   end
